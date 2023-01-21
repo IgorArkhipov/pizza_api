@@ -1,0 +1,22 @@
+# == Schema Information
+#
+# Table name: ingredients
+#
+#  id         :integer          not null, primary key
+#  name       :string
+#  price      :float
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+# Indexes
+#
+#  index_ingredients_on_name  (name) UNIQUE
+#
+
+one:
+  name: MyString
+  price: 1.5
+
+two:
+  name: MyString
+  price: 1.5
