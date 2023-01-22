@@ -27,4 +27,6 @@ class OrderPizza < ApplicationRecord
   belongs_to :order
   belongs_to :pizza
   belongs_to :size
+  has_many :order_pizza_ingredients, dependent: :destroy
+  has_many :ingredients, through: :order_pizza_ingredients
 end

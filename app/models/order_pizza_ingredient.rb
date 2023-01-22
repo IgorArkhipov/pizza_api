@@ -27,4 +27,7 @@ class OrderPizzaIngredient < ApplicationRecord
 
   belongs_to :order_pizza
   belongs_to :ingredient
+
+  scope :added, -> { where(action_type: 'added') }
+  scope :removed, -> { where(action_type: 'removed') }
 end

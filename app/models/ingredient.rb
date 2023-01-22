@@ -15,4 +15,5 @@
 #  index_ingredients_on_name  (name) UNIQUE
 #
 class Ingredient < ApplicationRecord
+  has_many :order_pizza_ingredients, dependent: :destroy
 end
