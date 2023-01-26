@@ -1,0 +1,10 @@
+%h1 Orders
+
+%table(style="border-collapse: collapse;")
+  %tbody
+    - orders.each do |order|
+      %tr(style="border-top: 1px solid black;")
+        %td(style="padding-right: 20px; vertical-align: top;")
+          = render 'order_info', order: order
+        %td(style="vertical-align: top;")
+          = render 'items', order: order

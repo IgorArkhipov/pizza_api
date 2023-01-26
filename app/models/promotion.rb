@@ -25,10 +25,11 @@
 #  size_id   (size_id => sizes.id)
 #
 class Promotion < ApplicationRecord
-  has_many :order_promotions, dependent: :destroy
-  has_many :orders, through: :order_promotions
   belongs_to :pizza
   belongs_to :size
+  has_many :order_promotions, dependent: :destroy
+  has_many :orders, through: :order_promotions
 
-  validates :name, :from, :to, presence: true
+  validates :name, presence: true
+  validates :from, :to, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
 end

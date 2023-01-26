@@ -16,4 +16,7 @@
 #
 class Discount < ApplicationRecord
   has_one :order, dependent: :nullify
+
+  validates :name, presence: true, uniqueness: true
+  validates :deduction_in_percent, presence: true, numericality: { greater_than: 0 }
 end

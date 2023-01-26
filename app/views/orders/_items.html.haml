@@ -1,0 +1,13 @@
+Items:
+%ul
+  - order.order_pizzas.each do |pizza_order|
+    %li
+      #{ pizza_order.pizza.name } (#{ pizza_order.size.name })
+      - if pizza_order.order_pizza_ingredients.added.present?
+        %ul
+          %li
+            Add: #{ pizza_order.order_pizza_ingredients.added.map(&:ingredient).map(&:name).join(', ') }
+      - if pizza_order.order_pizza_ingredients.removed.present?
+        %ul
+          %li
+            Remove: #{ pizza_order.order_pizza_ingredients.removed.map(&:ingredient).map(&:name).join(', ') }

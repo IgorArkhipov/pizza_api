@@ -15,4 +15,6 @@
 #  index_sizes_on_name  (name) UNIQUE
 #
 class Size < ApplicationRecord
+  validates :name, presence: true, uniqueness: true
+  validates :multiplier, presence: true, numericality: { greater_than: 0 }
 end

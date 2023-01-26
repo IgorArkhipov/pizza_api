@@ -30,4 +30,6 @@ class OrderPizzaIngredient < ApplicationRecord
 
   scope :added, -> { where(action_type: 'added') }
   scope :removed, -> { where(action_type: 'removed') }
+
+  validates :action_type, presence: true, inclusion: { in: TYPES }
 end

@@ -19,11 +19,17 @@
 #  discount_id  (discount_id => discounts.id)
 #
 class Order < ApplicationRecord
+  VALID_STATES = %w[OPEN COMPLETE].freeze
+
+  belongs_to :discount, optional: true
   has_many :order_pizzas, dependent: :destroy
   has_many :pizzas, through: :order_pizzas
   has_many :order_promotions, dependent: :destroy
   has_many :promotions, through: :order_promotions
-  belongs_to :discount, optional: true
+
+  scope :opened, -> { where(state: 'OPEN') }
+
+  validates :state, presence: true, inclusion: { in: VALID_STATES }
 
   def total_price
     if discount
@@ -36,8 +42,7 @@ class Order < ApplicationRecord
   private
 
   def pizzas_with_extras_price
-    order_pizzas_groups = order_pizzas.includes(:size, :pizza, { order_pizza_ingredients: :ingredient })
-                                      .group_by { |p| [p.pizza, p.size] }
+    order_pizzas_groups = order_pizzas.group_by { |p| [p.pizza, p.size] }
 
     pizzas_aggregated_price(order_pizzas_groups, promotions)
   end

@@ -3,7 +3,7 @@
 class CreateOrders < ActiveRecord::Migration[7.0]
   def change
     create_table :orders, id: :uuid do |t|
-      t.string :state
+      t.string :state, null: false
       t.belongs_to :discount, foreign_key: true
 
       t.timestamps
