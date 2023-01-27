@@ -5,9 +5,9 @@
 # Table name: promotions
 #
 #  id         :integer          not null, primary key
-#  from       :integer
+#  from       :integer          not null
 #  name       :string
-#  to         :integer
+#  to         :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  pizza_id   :integer          not null
@@ -27,7 +27,65 @@
 require 'test_helper'
 
 class PromotionTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  setup do
+    @pizza = Pizza.create(name: 'Margherita', price: 10)
+    @size = Size.create(name: 'Normal', multiplier: 1.0)
+  end
+
+  test 'should create with valid attributes' do
+    promotion = Promotion.new(name: 'New Year', from: 2, to: 1,
+                              pizza: @pizza, size: @size)
+    assert promotion.save
+  end
+
+  test 'should not create with non-unique name' do
+    Promotion.create(name: 'January', from: 2, to: 1,
+                     pizza: @pizza, size: @size)
+    promotion = Promotion.new(name: 'January', from: 2, to: 1,
+                              pizza: @pizza, size: @size)
+    assert_not promotion.save
+    assert_not_nil promotion.errors[:name]
+  end
+
+  test 'should not create without name' do
+    promotion = Promotion.new(from: 10, to: 20, pizza: @pizza, size: @size)
+    assert_not promotion.save
+    assert_not_nil promotion.errors[:name]
+  end
+
+  test 'should not create without from and to' do
+    promotion = Promotion.new(name: 'New Year', pizza: @pizza, size: @size)
+    assert_not promotion.save
+    assert_not_nil promotion.errors[:from]
+    assert_not_nil promotion.errors[:to]
+  end
+
+  test 'should not create with negative from and to' do
+    promotion = Promotion.new(name: 'New Year', from: -2, to: -1,
+                              pizza: @pizza, size: @size)
+    assert_not promotion.save
+    assert_not_nil promotion.errors[:from]
+    assert_not_nil promotion.errors[:to]
+  end
+
+  test 'should not create with non-numeric from and to' do
+    promotion = Promotion.new(name: 'New Year', from: 'two', to: 'one',
+                              pizza: @pizza, size: @size)
+    assert_not promotion.save
+    assert_not_nil promotion.errors[:from]
+    assert_not_nil promotion.errors[:to]
+  end
+
+  test 'should have related pizza' do
+    promotion = Promotion.new(name: 'New Year', from: 2, to: 1, size: @size)
+    assert_not promotion.save
+    assert_not_nil promotion.errors[:pizza]
+  end
+
+  test 'should have related size' do
+    promotion = Promotion.new(name: 'New Year', from: 2, to: 1,
+                              pizza: @pizza)
+    assert_not promotion.save
+    assert_not_nil promotion.errors[:size]
+  end
 end

@@ -5,7 +5,7 @@
 # Table name: discounts
 #
 #  id                   :integer          not null, primary key
-#  deduction_in_percent :float
+#  deduction_in_percent :float            not null
 #  name                 :string
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null

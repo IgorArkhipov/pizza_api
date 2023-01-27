@@ -6,7 +6,7 @@
 #
 #  id         :integer          not null, primary key
 #  name       :string
-#  price      :float
+#  price      :float            not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #

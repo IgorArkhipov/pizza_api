@@ -5,7 +5,7 @@
 # Table name: sizes
 #
 #  id         :integer          not null, primary key
-#  multiplier :float
+#  multiplier :float            not null
 #  name       :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

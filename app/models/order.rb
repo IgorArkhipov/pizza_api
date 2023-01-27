@@ -4,8 +4,8 @@
 #
 # Table name: orders
 #
-#  id          :uuid             not null, primary key
-#  state       :string
+#  id          :string           not null, primary key
+#  state       :string           not null
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null
 #  discount_id :integer
@@ -30,6 +30,10 @@ class Order < ApplicationRecord
   scope :opened, -> { where(state: 'OPEN') }
 
   validates :state, presence: true, inclusion: { in: VALID_STATES }
+
+  before_create do
+    self.id = SecureRandom.uuid unless id
+  end
 
   def total_price
     if discount

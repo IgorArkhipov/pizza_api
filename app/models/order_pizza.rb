@@ -7,7 +7,7 @@
 #  id         :integer          not null, primary key
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  order_id   :uuid             not null
+#  order_id   :string           not null
 #  pizza_id   :integer          not null
 #  size_id    :integer          not null
 #

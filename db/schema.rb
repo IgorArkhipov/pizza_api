@@ -13,7 +13,7 @@
 ActiveRecord::Schema[7.0].define(version: 2023_01_21_213829) do
   create_table "discounts", force: :cascade do |t|
     t.string "name"
-    t.float "deduction_in_percent"
+    t.float "deduction_in_percent", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_discounts_on_name", unique: true
@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_21_213829) do
 
   create_table "ingredients", force: :cascade do |t|
     t.string "name"
-    t.float "price"
+    t.float "price", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_ingredients_on_name", unique: true
@@ -37,18 +37,37 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_21_213829) do
     t.index ["order_pizza_id"], name: "index_order_pizza_ingredients_on_order_pizza_id"
   end
 
-# Could not dump table "order_pizzas" because of following StandardError
-#   Unknown type 'uuid' for column 'order_id'
+  create_table "order_pizzas", force: :cascade do |t|
+    t.string "order_id", null: false
+    t.integer "pizza_id", null: false
+    t.integer "size_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_pizzas_on_order_id"
+    t.index ["pizza_id"], name: "index_order_pizzas_on_pizza_id"
+    t.index ["size_id"], name: "index_order_pizzas_on_size_id"
+  end
 
-# Could not dump table "order_promotions" because of following StandardError
-#   Unknown type 'uuid' for column 'order_id'
+  create_table "order_promotions", force: :cascade do |t|
+    t.string "order_id", null: false
+    t.integer "promotion_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_promotions_on_order_id"
+    t.index ["promotion_id"], name: "index_order_promotions_on_promotion_id"
+  end
 
-# Could not dump table "orders" because of following StandardError
-#   Unknown type 'uuid' for column 'id'
+  create_table "orders", id: :string, force: :cascade do |t|
+    t.string "state", null: false
+    t.integer "discount_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["discount_id"], name: "index_orders_on_discount_id"
+  end
 
   create_table "pizzas", force: :cascade do |t|
     t.string "name"
-    t.float "price"
+    t.float "price", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_pizzas_on_name", unique: true
@@ -56,8 +75,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_21_213829) do
 
   create_table "promotions", force: :cascade do |t|
     t.string "name"
-    t.integer "from"
-    t.integer "to"
+    t.integer "from", null: false
+    t.integer "to", null: false
     t.integer "pizza_id", null: false
     t.integer "size_id", null: false
     t.datetime "created_at", null: false
@@ -69,7 +88,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_21_213829) do
 
   create_table "sizes", force: :cascade do |t|
     t.string "name"
-    t.float "multiplier"
+    t.float "multiplier", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_sizes_on_name", unique: true

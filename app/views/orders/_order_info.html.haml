@@ -7,7 +7,7 @@ Promotion codes: #{ order.promotions.map(&:name).join(', ') || '-' }
 Discount codes: #{ order.discount&.name || '-' }
 %br
 %br
-Total price: #{ order.total_price }
+Total price: #{ order.total_price }&euro;
 %br
 %br
 = button_to 'Complete', update_path(id: order.id), method: :patch
