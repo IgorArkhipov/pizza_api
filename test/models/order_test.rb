@@ -47,6 +47,25 @@ class OrderTest < ActiveSupport::TestCase
     assert_equal [order1, order3], Order.opened.to_a
   end
 
+  test 'should destroy order_pizzas on destroy' do
+    order = Order.create(state: 'OPEN')
+    pizza = Pizza.create(name: 'Margherita', price: 10)
+    size = Size.create(name: 'Large', multiplier: 1.2)
+    order_pizza = OrderPizza.create(pizza:, size:, order:)
+    order.destroy
+    assert_raises(ActiveRecord::RecordNotFound) { order_pizza.reload }
+  end
+
+  test 'should destroy order_promotions on destroy' do
+    order = Order.create(state: 'OPEN')
+    pizza = Pizza.create(name: 'Margherita', price: 10)
+    size = Size.create(name: 'Large', multiplier: 1.2)
+    promotion = Promotion.create(name: 'Promotion', pizza:, size:, from: 2, to: 1)
+    order_promotion = OrderPromotion.create(order:, promotion:)
+    order.destroy
+    assert_raises(ActiveRecord::RecordNotFound) { order_promotion.reload }
+  end
+
   test 'total_price with discount' do
     discount = Discount.create(name: 'Winter20', deduction_in_percent: 20)
     pizza = Pizza.create(name: 'Margherita', price: 10)

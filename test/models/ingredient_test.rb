@@ -26,6 +26,7 @@ class IngredientTest < ActiveSupport::TestCase
     Ingredient.create(name: 'Cheese', price: 2.5)
     ingredient = Ingredient.new(name: 'Cheese', price: 3.0)
     assert_not ingredient.save
+    assert_not_nil ingredient.errors[:name]
   end
 
   test 'should not create without name' do

@@ -33,7 +33,7 @@ class PromotionTest < ActiveSupport::TestCase
   end
 
   test 'should create with valid attributes' do
-    promotion = Promotion.new(name: 'New Year', from: 2, to: 1,
+    promotion = Promotion.new(name: 'January', from: 2, to: 1,
                               pizza: @pizza, size: @size)
     assert promotion.save
   end
@@ -54,14 +54,14 @@ class PromotionTest < ActiveSupport::TestCase
   end
 
   test 'should not create without from and to' do
-    promotion = Promotion.new(name: 'New Year', pizza: @pizza, size: @size)
+    promotion = Promotion.new(name: 'January', pizza: @pizza, size: @size)
     assert_not promotion.save
     assert_not_nil promotion.errors[:from]
     assert_not_nil promotion.errors[:to]
   end
 
   test 'should not create with negative from and to' do
-    promotion = Promotion.new(name: 'New Year', from: -2, to: -1,
+    promotion = Promotion.new(name: 'January', from: -2, to: -1,
                               pizza: @pizza, size: @size)
     assert_not promotion.save
     assert_not_nil promotion.errors[:from]
@@ -69,7 +69,7 @@ class PromotionTest < ActiveSupport::TestCase
   end
 
   test 'should not create with non-numeric from and to' do
-    promotion = Promotion.new(name: 'New Year', from: 'two', to: 'one',
+    promotion = Promotion.new(name: 'January', from: 'two', to: 'one',
                               pizza: @pizza, size: @size)
     assert_not promotion.save
     assert_not_nil promotion.errors[:from]
@@ -77,15 +77,23 @@ class PromotionTest < ActiveSupport::TestCase
   end
 
   test 'should have related pizza' do
-    promotion = Promotion.new(name: 'New Year', from: 2, to: 1, size: @size)
+    promotion = Promotion.new(name: 'January', from: 2, to: 1, size: @size)
     assert_not promotion.save
     assert_not_nil promotion.errors[:pizza]
   end
 
   test 'should have related size' do
-    promotion = Promotion.new(name: 'New Year', from: 2, to: 1,
+    promotion = Promotion.new(name: 'January', from: 2, to: 1,
                               pizza: @pizza)
     assert_not promotion.save
     assert_not_nil promotion.errors[:size]
+  end
+
+  test 'should destroy order_promotions on destroy' do
+    order = Order.create(state: 'OPEN')
+    promotion = Promotion.create(name: 'January', pizza: @pizza, size: @size, from: 2, to: 1)
+    order_promotion = OrderPromotion.create(order:, promotion:)
+    promotion.destroy
+    assert_raises(ActiveRecord::RecordNotFound) { order_promotion.reload }
   end
 end
